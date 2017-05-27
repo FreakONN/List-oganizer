@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html ng-app="myAngularApplication">
+<head>
+    <title>Sample Angular Application</title>
+
+    <script src="libs/angular.min.js"></script>
+    <script src="app/app.js"></script>
+    <script src="app/filter.js"></script>
+    <script src="app/book/localService.js"></script>
+    <script src="app/book/remoteService.js"></script>
+    <script src="app/book/mainController.js"></script>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+</head>
+<body ng-controller="mainController">
+
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <h3>
+                    {{ message }}
+                </h3>
+
+                <h4 ng-controller="mainController as userCtrl">
+                    {{ userCtrl.greeting }}
+                </h4>
+
+                <input type="button" ng-click="fetchList()" value="Fetch Books" class="btn btn-success">
+                <input type="button" ng-click="fetchListFromServer()" value="Fetch List From Server" class="btn btn-success">
+
+                <p ng-hide="list.length > 0">No lists fetched.</p>
+                <p ng-show="list.length > 0">
+
+                Order by: <select ng-model="orderField">
+                  <option value="id">ID</option>
+                  <option value="name">Name</option>
+                  <option value="username">Username</option>
+                  <option value="email">Email</option>
+                </select>
+
+                Descending: <input type="checkbox" ng-model="listOrdering" />
+                Filter: <input type="text" ng-model="filterString" value = "" />
+
+                <table class="table table-striped" ng-show="list.length > 0">
+                    <thead>
+                        <tr>
+                            <th>
+                                ID
+                            </th>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Username
+                            </th>
+                            <th>
+                                Email
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <!--
+                      1)iterating over the $scope.books array in controller
+                      2)if descending checkbox evaluates to true add minus (-) symbol to string else add empty space in front of string
+                      3)filters based on input VALUE in textbox - initialy srting value is empty so no filtering is done
+                    -->
+                        <tr ng-repeat="prop in list | limitTo:5 | orderBy: (listOrdering == true? '-': '') + orderField | filter: filterString">
+                            <td>
+                                {{ prop.id}}
+                                {{ prop.ID}}
+                            </td>
+                            <td>
+                                {{prop.name}}
+                                {{prop.BookName}}
+                            </td>
+                            <td>
+                                {{prop.username}}
+                                {{prop.AuthorName}}
+                            </td>
+                            <td>
+                                {{prop.email}}
+                                {{prop.ISBN}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+              </p>
+
+<!--          <p>
+                  {{ 2 | power:4 }}
+              </p> -->
+            <!-- <p>
+              JSON for books: {{ books | json }}
+             </p> -->
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
